@@ -45,4 +45,4 @@ jobs:
         id: commit
         with:
           commit_message: ${{ steps.commit_message_step.outputs.commit_message }}
-          taggig_message: ${{ steps.commit_tag.outputs.commit_tag }}
+          tagging_message: ${{ steps.commit_tag.outputs.commit_tag }}
