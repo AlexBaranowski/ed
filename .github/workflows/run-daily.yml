@@ -21,6 +21,11 @@ jobs:
           fetch-tags: true
           fetch-depth: 0
 
+      - name: Install prerequisites - lzip
+        run: |
+            sudo apt-get update -y
+            sudo apt-get install -y lzip
+
       - name: Update repository
         run: |
           bash ./update-repository.sh
