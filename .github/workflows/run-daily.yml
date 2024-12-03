@@ -33,12 +33,12 @@ jobs:
       - name: Set commit message
         id: commit_message_step
         run: |
-          cat /tmp/commit-message > $GITHUB_OUTPUT
+          "commit_message=$(cat /tmp/commit-message)" >> $GITHUB_OUTPUT
 
       - name: Set commit tag
         id: commit_tag
         run: |
-          cat /tmp/commit-message > $GITHUB_OUTPUT
+          "commit_tag=$(cat /tmp/commit-tag)" > $GITHUB_OUTPUT
 
       # Commit all changed files back to the repository
       - uses: stefanzweifel/git-auto-commit-action@v5
