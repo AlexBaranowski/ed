@@ -18,13 +18,14 @@ File: ed.info,  Node: Top,  Next: Overview,  Up: (dir)
 The GNU ed line editor
 **********************
 
-This manual is for GNU ed (version 1.20.2, 22 April 2024).
+This manual is for GNU ed (version 1.21-rc1, 20 November 2024).
 
 * Menu:
 
 * Overview::                        Overview of the 'ed' command
 * Introduction to line editing::    Getting started with GNU 'ed'
 * Invoking ed::                     Command-line interface
+* Argument syntax::                 By convention, options start with a hyphen
 * Line addressing::                 Specifying lines/ranges in the buffer
 * Regular expressions::             Patterns for selecting text
 * Commands::                        Commands recognized by GNU 'ed'
@@ -303,7 +304,7 @@ Relevant documents are:
      Addison-Wesley, 1981.
 
 
-File: ed.info,  Node: Invoking ed,  Next: Line addressing,  Prev: Introduction to line editing,  Up: Top
+File: ed.info,  Node: Invoking ed,  Next: Argument syntax,  Prev: Introduction to line editing,  Up: Top
 
 3 Invoking ed
 *************
@@ -330,8 +331,7 @@ current line to the last line matching RE. If RE does not match any line,
 ed fails immediately with exit status 1 unless the option '-l' is specified
 and standard input is not a regular file.
 
-   'ed' supports the following options: *Note Argument syntax:
-(arg_parser)Argument syntax.
+'ed' supports the following options: *Note Argument syntax::.
 
 '-h'
 '--help'
@@ -406,9 +406,52 @@ problems with the input file (file not found, buffer modified, I/O errors),
 3 for an internal consistency error (e.g., bug) which caused ed to panic.
 
 
-File: ed.info,  Node: Line addressing,  Next: Regular expressions,  Prev: Invoking ed,  Up: Top
+File: ed.info,  Node: Argument syntax,  Next: Line addressing,  Prev: Invoking ed,  Up: Top
 
-4 Line addressing
+4 Syntax of command-line arguments
+**********************************
+
+POSIX recommends these conventions for command-line arguments.
+
+   * A command-line argument is an option if it begins with a hyphen ('-').
+
+   * Option names are single alphanumeric characters.
+
+   * Certain options require an argument.
+
+   * An option and its argument may or may not appear as separate tokens.
+     (In other words, the whitespace separating them is optional). Thus,
+     '-o foo' and '-ofoo' are equivalent.
+
+   * One or more options without arguments, followed by at most one option
+     that takes an argument, may follow a hyphen in a single token. Thus,
+     '-abc' is equivalent to '-a -b -c'.
+
+   * Options typically precede other non-option arguments.
+
+   * The argument '--' terminates all options; any following arguments are
+     treated as non-option arguments, even if they begin with a hyphen.
+
+   * A token consisting of a single hyphen character is interpreted as an
+     ordinary non-option argument. By convention, it is used to specify
+     standard input, standard output, or a file named '-'.
+
+GNU adds "long options" to these conventions:
+
+   * A long option consists of two hyphens ('--') followed by a name made
+     of alphanumeric characters and hyphens. Option names are typically one
+     to three words long, with hyphens to separate words. Abbreviations can
+     be used for the long option names as long as the abbreviations are
+     unique.
+
+   * A long option and its argument may or may not appear as separate
+     tokens. In the latter case they must be separated by an equal sign '='.
+     Thus, '--foo bar' and '--foo=bar' are equivalent.
+
+
+File: ed.info,  Node: Line addressing,  Next: Regular expressions,  Prev: Argument syntax,  Up: Top
+
+5 Line addressing
 *****************
 
 An address represents the number of a line in the buffer. 'ed' maintains a
@@ -513,7 +556,7 @@ fails to find a matching line.
 
 File: ed.info,  Node: Regular expressions,  Next: Commands,  Prev: Line addressing,  Up: Top
 
-5 Regular expressions
+6 Regular expressions
 *********************
 
 Regular expressions are patterns used in selecting text. For example, the
@@ -667,7 +710,7 @@ implementation in your system.
 
 File: ed.info,  Node: Commands,  Next: The 's' Command,  Prev: Regular expressions,  Up: Top
 
-6 Commands
+7 Commands
 **********
 
 All 'ed' commands are single characters, though some require additional
@@ -962,7 +1005,7 @@ parenthesis).
 
 File: ed.info,  Node: The 's' Command,  Next: Limitations,  Prev: Commands,  Up: Top
 
-7 Substitute command
+8 Substitute command
 ********************
 
 The substitute command 's' replaces text in the addressed lines matching a
@@ -1034,7 +1077,7 @@ the substitution).
 
 File: ed.info,  Node: Limitations,  Next: Diagnostics,  Prev: The 's' Command,  Up: Top
 
-8 Limitations
+9 Limitations
 *************
 
 If the terminal hangs up and the buffer is modified and not empty, 'ed'
@@ -1057,8 +1100,8 @@ number of lines is INT_MAX - 2 lines.
 
 File: ed.info,  Node: Diagnostics,  Next: Problems,  Prev: Limitations,  Up: Top
 
-9 Diagnostics
-*************
+10 Diagnostics
+**************
 
 'ed' prints two kinds of mesages: diagnostic messages (errors and warnings)
 written to standard error and help messages written to standard output.
@@ -1079,7 +1122,7 @@ command list is executed only once.
 
 File: ed.info,  Node: Problems,  Next: GNU Free Documentation License,  Prev: Diagnostics,  Up: Top
 
-10 Reporting bugs
+11 Reporting bugs
 *****************
 
 There are probably bugs in 'ed'. There are certainly errors and omissions
@@ -1094,7 +1137,7 @@ eternity, if not longer.
 
 File: ed.info,  Node: GNU Free Documentation License,  Prev: Problems,  Up: Top
 
-11 GNU Free Documentation License
+12 GNU Free Documentation License
 *********************************
 
                        Version 1.3, 3 November 2008
@@ -1558,19 +1601,20 @@ use in free software.
 
 Tag Table:
 Node: Top535
-Node: Overview1764
-Node: Introduction to line editing4668
-Node: Invoking ed11935
-Node: Line addressing15812
-Node: Regular expressions19845
-Node: Commands26030
-Ref: print suffixes26365
-Ref: shell escape command38761
-Node: The 's' Command40065
-Node: Limitations42980
-Node: Diagnostics44003
-Node: Problems44838
-Node: GNU Free Documentation License45373
+Node: Overview1848
+Node: Introduction to line editing4752
+Node: Invoking ed12019
+Node: Argument syntax15866
+Node: Line addressing17628
+Node: Regular expressions21665
+Node: Commands27850
+Ref: print suffixes28185
+Ref: shell escape command40581
+Node: The 's' Command41885
+Node: Limitations44800
+Node: Diagnostics45823
+Node: Problems46660
+Node: GNU Free Documentation License47195
 
 End Tag Table
 

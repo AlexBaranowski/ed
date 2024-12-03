@@ -233,7 +233,7 @@ int main( const int argc, const char * const argv[] )
     { 'V', "version",              ap_no  },
     { opt_cr, "strip-trailing-cr", ap_no  },
     { opt_un, "unsafe-names",      ap_no  },
-    {  0, 0,                       ap_no } };
+    { 0, 0,                        ap_no  } };
 
   struct Arg_parser parser;
   if( argc > 0 ) invocation_name = argv[0];

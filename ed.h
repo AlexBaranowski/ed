@@ -17,10 +17,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __cplusplus
-enum Bool { false = 0, true = 1 };
-typedef enum Bool bool;
-#endif
+#include <stdbool.h>
 
 enum Pflags			/* print suffixes */
   {
