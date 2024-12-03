@@ -1,5 +1,5 @@
 /*  GNU ed - The GNU line editor.
-    Copyright (C) 2006-2016 Antonio Diaz Diaz.
+    Copyright (C) 2006-2017 Antonio Diaz Diaz.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,11 +44,12 @@
 
 static const char * const Program_name = "GNU Ed";
 static const char * const program_name = "ed";
-static const char * const program_year = "2016";
+static const char * const program_year = "2017";
 static const char * invocation_name = 0;
 
 static bool restricted_ = false;	/* if set, run in restricted mode */
-static bool scripted_ = false;		/* if set, suppress diagnostics */
+static bool scripted_ = false;		/* if set, suppress diagnostics,
+					   byte counts and '!' prompt */
 static bool traditional_ = false;	/* if set, be backwards compatible */
 
 
@@ -68,8 +69,8 @@ static void show_help( void )
           "  -l, --loose-exit-status    exit with 0 status even if a command fails\n"
           "  -p, --prompt=STRING        use STRING as an interactive prompt\n"
           "  -r, --restricted           run in restricted mode\n"
-          "  -s, --quiet, --silent      suppress diagnostics\n"
-          "  -v, --verbose              be verbose\n"
+          "  -s, --quiet, --silent      suppress diagnostics, byte counts and '!' prompt\n"
+          "  -v, --verbose              be verbose; equivalent to the 'H' command\n"
           "Start edit by reading in 'file' if given.\n"
           "If 'file' begins with a '!', read output of shell command.\n"
           "\nExit status: 0 for a normal exit, 1 for environmental problems (file\n"
@@ -128,7 +129,7 @@ bool is_regular_file( const int fd )
 bool may_access_filename( const char * const name )
   {
   if( restricted_ &&
-      ( *name == '!' || !strcmp( name, ".." ) || strchr( name, '/' ) ) )
+      ( *name == '!' || strcmp( name, ".." ) == 0 || strchr( name, '/' ) ) )
     {
     set_error_msg( "Shell access restricted" );
     return false;
@@ -181,13 +182,14 @@ int main( const int argc, const char * const argv[] )
                 return 3;
       }
     } /* end process options */
+
   setlocale( LC_ALL, "" );
   if( !init_buffers() ) return 1;
 
   while( argind < ap_arguments( &parser ) )
     {
     const char * const arg = ap_argument( &parser, argind );
-    if( !strcmp( arg, "-" ) ) { scripted_ = true; ++argind; continue; }
+    if( strcmp( arg, "-" ) == 0 ) { scripted_ = true; ++argind; continue; }
     if( may_access_filename( arg ) )
       {
       if( read_file( arg, 0 ) < 0 && is_regular_file( 0 ) )
@@ -196,7 +198,7 @@ int main( const int argc, const char * const argv[] )
       }
     else
       {
-      fputs( "?\n", stderr );
+      fputs( "?\n", stdout );
       if( arg[0] ) set_error_msg( "Invalid filename" );
       if( is_regular_file( 0 ) ) return 2;
       }
