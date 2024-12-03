@@ -108,6 +108,9 @@ print_info "File based checks passed"
 #
 filenames=$(curl https://download.savannah.gnu.org/releases/ed/ | grep -o '>ed-.*tar.lz<' | tr -d '<>')
 
+print_info "Git tags ->"
+git tag
+print_info "Git tags end"
 
 IFS=$'\n' sorted_filenames=($(sort -V <<< "$(for f in $filenames; do echo "$(extract_version "$f") $f"; done)"))
 IFS=' '
