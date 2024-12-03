@@ -129,9 +129,10 @@ for filename in "${sorted_filenames[@]}"; do
     version=$(echo $filename | awk '{print $1}')
     print_info "Processing $rl_filename with version $version"
     
-    if check_if_git_tag_exists $version; then
-        download_and_repack_to_tmp $rl_filename
-        prepare_files_for_commit_gh_actions $version $rl_filename
+    if check_if_git_tag_exists "$version"; then
+        download_and_repack_to_tmp "$rl_filename"
+        prepare_files_for_commit_gh_actions "$version" "$rl_filename"
+        print_info "Exiting with success, each GH action should be responsible for the single commit"
         exit 0 # only one version should be imported at the time!
     else
         print_info "Skipping $rl_filename -> $version as it already exists in the repository!"
