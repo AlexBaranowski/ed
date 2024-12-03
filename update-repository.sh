@@ -11,6 +11,7 @@ print_info(){
 }
 print_error(){
     echo -e "\e[31m[error] $1\e[0m"
+    exit 1
 }
 
 
@@ -70,6 +71,9 @@ download_and_repack_to_tmp(){
     curl -LO $dl_url
     print_info "Entering xtrace mode"
     set -x
+    print_info "Extracting $filename to $temp_dir"
+    [ -d $temp_dir ] || mkdir -p $temp_dir # gh actions problem with /tmp ...
+    [ -f $filename ] || print_error "File $filename does not exist!"
     tar  -xvf $filename -C $temp_dir
     rm $filename
     backup_self_code
@@ -90,17 +94,14 @@ prepare_files_for_commit_gh_actions(){
 
 if [ $TAR_GZ_NUMBER -ne $TAR_GZ_EXP_NUMER ]; then
   print_error "[FAIL] Number of tar.gz files does not match the expected number"
-  exit 1
 fi
 
 if [ $TAR_BZ2_NUMBER -ne $TAR_BZ2_EXP_NUMER ]; then
   print_error "[FAIL] Number of tar.bz2 files does not match the expected number"
-  exit 1
 fi
 
 if [ $((TAR_GZ_NUMBER+TAR_BZ2_NUMBER+TAR_LZ_NUMBER)) -ne $FILES_ALL_NUMBER ]; then
   print_error "Number of all files does not match the expected number! There might be new tar file type!"
-  exit 1
 fi
 
 print_info "File based checks passed"
@@ -136,3 +137,4 @@ for filename in "${sorted_filenames[@]}"; do
         print_info "Skipping $rl_filename -> $version as it already exists in the repository!"
     fi
 done
+
