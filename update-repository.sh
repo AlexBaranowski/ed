@@ -125,8 +125,8 @@ for filename in "${sorted_filenames[@]}"; do
     rl_filename=$(echo $filename | awk '{print $2}')
     version=$(echo $filename | awk '{print $1}')
     print_info "Processing $rl_filename with version $version"
-    check_if_git_tag_exists $version
-    if [ $? -eq 0 ]; then
+    
+    if check_if_git_tag_exists $version; then
         download_and_repack_to_tmp $rl_filename
         commit_tag_push $version $rl_filename
         exit 0 # only one version should be imported at the time!
