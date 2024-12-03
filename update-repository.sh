@@ -80,14 +80,13 @@ download_and_repack_to_tmp(){
     restore_self_code
 }
 
-commit_tag_push(){
+prepare_files_for_commit_gh_actions(){
     version=$1
-    filename=$2
-    git add .
-    git commit -m "Import $filename"
-    git tag -a $version -m $version
-    git push origin master --tags
+    rl_filename=$2
+    echo "Import $rl_filename" > /tmp/commit-message
+    echo "$version" > /tmp/commit-tag
 }
+
 
 if [ $TAR_GZ_NUMBER -ne $TAR_GZ_EXP_NUMER ]; then
   print_error "[FAIL] Number of tar.gz files does not match the expected number"
@@ -128,7 +127,9 @@ for filename in "${sorted_filenames[@]}"; do
     
     if check_if_git_tag_exists $version; then
         download_and_repack_to_tmp $rl_filename
-        commit_tag_push $version $rl_filename
+        prepare_files_for_commit_gh_actions $version $rl_filename
         exit 0 # only one version should be imported at the time!
+    else
+        print_info "Skipping $rl_filename -> $version as it already exists in the repository!"
     fi
 done
