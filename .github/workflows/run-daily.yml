@@ -19,7 +19,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Update repository:
+      - name: Update repository
         run: |
           bash ./update-repository.sh
 
