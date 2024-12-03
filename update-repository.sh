@@ -73,8 +73,8 @@ download_and_repack_to_tmp(){
     set -x
     print_info "Extracting $filename to $temp_dir"
     [ -d $temp_dir ] || mkdir -p $temp_dir # gh actions problem with /tmp ...
-    [ -f $filename ] || print_error "File $filename does not exist!"
-    tar  -xvf $filename -C $temp_dir
+    [ -f ./$filename ] || print_error "File $filename does not exist!"
+    tar -xvf ./$filename -C $temp_dir
     rm $filename
     backup_self_code
     rm -rf $SCRIPT_DIR/*
