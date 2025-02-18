@@ -55,7 +55,7 @@ restore_self_code(){
 
 check_if_git_tag_exists(){
     version=$1
-    if git tag | grep -q "$version"; then
+    if git tag | grep -q "^$version$"; then
         echo "[INFO] Tag $version already exists"
         return 1
     fi
