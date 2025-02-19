@@ -1,6 +1,6 @@
 #! /bin/sh
 # check script for GNU ed - The GNU line editor
-# Copyright (C) 2006-2024 Antonio Diaz Diaz.
+# Copyright (C) 2006-2025 Antonio Diaz Diaz.
 #
 # This script is free software; you have unlimited permission
 # to copy, distribute, and modify it.
@@ -123,7 +123,7 @@ if [ ${fail} = 0 ] ; then
 	cd "${objdir}" && rm -r tmp
 else
 	echo "tests failed."
-	echo "Please, send a bug report to bug-ed@gnu.org."
+	echo "Please, send a bug report to bug-ed@gnu.org"
 	echo "Include the (compressed) contents of '${objdir}/tmp' in the report."
 fi
 exit ${fail}
